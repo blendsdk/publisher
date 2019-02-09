@@ -15,7 +15,7 @@ const fs = require("fs");
 
 let package = pkg.get_package();
 
-logger.banner("BlendSDK Project Publisher");
+logger.banner(`BlendSDK Project Publisher v${package.version}`);
 
 // check the command lien parameter
 if (cmd.check()) {
