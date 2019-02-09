@@ -27,7 +27,7 @@ if (cmd.check()) {
         if (git.is_clean()) {
             // calculate a new version
             let newVersion = bumpVersion(cmd.versionType(), curVersion);
-            logger.log(`New version: ${newVersion}`);
+            logger.info(`The new version is: ${newVersion}`);
             // creating a new release branch
             relBranch = git.create_release_branch(newVersion);
             if (utils.set_package_version(pkg.get_package_file(), newVersion, false)) {
