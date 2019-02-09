@@ -9,6 +9,7 @@ const utils = require("./lib/utils");
 const publishFrom = config.publishFrom || "master";
 const pushDevelBranch = config.pushDevelBranch === undefined ? true : config.pushDevelBranch;
 const commands = config.commands || [];
+const devCommands = config.devCommands || [];
 
 const fs = require("fs");
 
@@ -37,7 +38,7 @@ if (cmd.check()) {
                         // commit the changes
                         if (git.commit(`Patched files to ${newVersion}`)) {
                             // run external command from config
-                            if (utils.run_commands(commands)) {
+                            if (utils.run_commands(commands, newVersion)) {
                                 // merge the release branch to the branch that is being published from
                                 if (git.merge_to(publishFrom, relBranch)) {
                                     // tag the master branch
@@ -49,20 +50,22 @@ if (cmd.check()) {
                                                 // switch to the dev branch
                                                 if (git.switch_branch(curBranch)) {
                                                     // set the version of the devel branch
-                                                    if (
-                                                        utils.set_package_version(
-                                                            pkg.get_package_file(),
-                                                            newVersion,
-                                                            true
-                                                        )
-                                                    ) {
-                                                        // push the devel branch
-                                                        if (pushDevelBranch) {
-                                                            if (git.push_branch(curBranch)) {
+                                                    if (utils.run_commands(devCommands, newVersion)) {
+                                                        if (
+                                                            utils.set_package_version(
+                                                                pkg.get_package_file(),
+                                                                newVersion,
+                                                                true
+                                                            )
+                                                        ) {
+                                                            // push the devel branch
+                                                            if (pushDevelBranch) {
+                                                                if (git.push_branch(curBranch)) {
+                                                                    logger.info("All Done");
+                                                                }
+                                                            } else {
                                                                 logger.info("All Done");
                                                             }
-                                                        } else {
-                                                            logger.info("All Done");
                                                         }
                                                     }
                                                 }
