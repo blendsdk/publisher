@@ -1,6 +1,6 @@
 {
     "name": "@blendsdk/publisher",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "BlendSDK Publisher Utility",
     "main": "index.js",
     "bin": {
